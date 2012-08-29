@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://sma-promail/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://sma-promail/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://sma-promail/">
+      <s:element name="ProductBalanceByWarehouse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="productid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ownerid" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProductBalanceByWarehouseResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProductBalanceByWarehouseResult" type="tns:ArrayOfProductBalanceResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfProductBalanceResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProductBalanceResult" nillable="true" type="tns:ProductBalanceResult" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProductBalanceResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Warehouse" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="OnHand" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Reserved" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Unavailable" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Available" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Backordered" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="AuthenticationHeader" type="tns:AuthenticationHeader" />
+      <s:complexType name="AuthenticationHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ProductBalanceByWarehouseSoapIn">
+    <wsdl:part name="parameters" element="tns:ProductBalanceByWarehouse" />
+  </wsdl:message>
+  <wsdl:message name="ProductBalanceByWarehouseSoapOut">
+    <wsdl:part name="parameters" element="tns:ProductBalanceByWarehouseResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProductBalanceByWarehouseAuthenticationHeader">
+    <wsdl:part name="AuthenticationHeader" element="tns:AuthenticationHeader" />
+  </wsdl:message>
+  <wsdl:portType name="FulfworksWSSoap">
+    <wsdl:operation name="ProductBalanceByWarehouse">
+      <wsdl:input message="tns:ProductBalanceByWarehouseSoapIn" />
+      <wsdl:output message="tns:ProductBalanceByWarehouseSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FulfworksWSSoap" type="tns:FulfworksWSSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ProductBalanceByWarehouse">
+      <soap:operation soapAction="http://sma-promail/ProductBalanceByWarehouse" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ProductBalanceByWarehouseAuthenticationHeader" part="AuthenticationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="FulfworksWSSoap12" type="tns:FulfworksWSSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ProductBalanceByWarehouse">
+      <soap12:operation soapAction="http://sma-promail/ProductBalanceByWarehouse" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ProductBalanceByWarehouseAuthenticationHeader" part="AuthenticationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FulfworksWS">
+    <wsdl:port name="FulfworksWSSoap" binding="tns:FulfworksWSSoap">
+      <soap:address location="https://pm.orders.fulfillmentworks.com/ProductBalance/FulfworksWS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="FulfworksWSSoap12" binding="tns:FulfworksWSSoap12">
+      <soap12:address location="https://pm.orders.fulfillmentworks.com/ProductBalance/FulfworksWS.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

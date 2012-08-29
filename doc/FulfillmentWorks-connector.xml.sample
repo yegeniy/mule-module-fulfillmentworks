@@ -1,0 +1,27 @@
+<!-- BEGIN_INCLUDE(fulfillmentworks:add-orders) -->
+    <fulfillmentworks:add-orders />
+<!-- END_INCLUDE(fulfillmentworks:add-orders) -->
+
+<!-- BEGIN_INCLUDE(fulfillmentworks:add-product) -->
+    <fulfillmentworks:add-product />
+<!-- END_INCLUDE(fulfillmentworks:add-product) -->
+
+<!-- BEGIN_INCLUDE(fulfillmentworks:add-offer) -->
+    <fulfillmentworks:add-offer />
+<!-- END_INCLUDE(fulfillmentworks:add-offer) -->
+
+<!-- BEGIN_INCLUDE(fulfillmentworks:get-stock-info) -->
+    <fulfillmentworks:get-stock-info />
+<!-- END_INCLUDE(fulfillmentworks:get-stock-info) -->
+
+<!-- BEGIN_INCLUDE(fulfillmentworks:get-offers) -->
+    <fulfillmentworks:get-offers />
+<!-- END_INCLUDE(fulfillmentworks:get-offers) -->
+
+<!-- BEGIN_INCLUDE(fulfillmentworks:get-order-status) -->
+    <fulfillmentworks:get-order-status/>
+<!-- END_INCLUDE(fulfillmentworks:get-order-status) -->
+
+<!-- BEGIN_INCLUDE(fulfillmentworks:get-stock-info-light) -->
+    <fulfillmentworks:get-stock-info-light/>
+<!-- END_INCLUDE(fulfillmentworks:get-stock-info-light) -->

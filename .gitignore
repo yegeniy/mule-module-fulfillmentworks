@@ -1,0 +1,18 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+target/
+.settings/
+.classpath
+.project
+*.iml
+*.ipr
+*.iws
+.DS_Store
+.metadata
+git.properties
+*.swp
+.idea

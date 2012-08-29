@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:spring="http://www.springframework.org/schema/beans"
+      xmlns:fulfillmentworks="http://www.mulesoft.org/schema/mule/fulfillmentworks"
+      xmlns:context="http://www.springframework.org/schema/context"
+
+      xsi:schemaLocation="
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+      http://www.mulesoft.org/schema/mule/fulfillmentworks http://www.mulesoft.org/schema/mule/fulfillmentworks/1.0/mule-fulfillmentworks.xsd
+      ">
+
+
+    <context:property-placeholder location="classpath:/app.properties"/>
+
+    <spring:bean id="productTransformerHelper" class="org.mule.module.fulfillmentworks.transformers.ProductTransformerHelper">
+        <spring:property name="systemID" value="${osis.fulfillmentworks.system.id}"/>
+        <spring:property name="ownerID" value="${osis.fulfillmentworks.owner.id}"/>
+        <spring:property name="bundleProductId" value="${osis.fulfillmentworks.products.bundle.id}"/>
+        <spring:property name="simpleProductId" value="${osis.fulfillmentworks.products.simple.id}"/>
+        <spring:property name="simpleProductBackorderTreatment" value="${osis.fulfillmentworks.products.simple.backordertreatment}"/>
+        <spring:property name="bundleProductBackorderTreatment" value="${osis.fulfillmentworks.products.bundle.backordertreatment}"/>
+        <spring:property name="bundleProductDoNotShipAlone" value="${osis.fulfillmentworks.products.bundle.donotshipalone}"/>
+        <spring:property name="simpleProductDoNotShipAlone" value="${osis.fulfillmentworks.products.simple.donotshipalone}"/>
+    </spring:bean>
+
+    <spring:bean id="osSimpleProductToFWProduct" class="org.mule.module.fulfillmentworks.transformers.OSSimpleProductToFWProduct">
+        <spring:property name="productTransformerHelper" ref="productTransformerHelper"/>
+    </spring:bean>
+
+    <spring:bean id="osOrderTOFWOrder" class="org.mule.module.fulfillmentworks.transformers.OSOrderTOFWOrder">
+        <spring:property name="standardFreightCode" value="${osis.fulfillmentworks.standard_freight_code}"/>
+        <spring:property name="standardFreightDescription" value="${osis.fulfillmentworks.standard_freight_code_desc}"/>
+    </spring:bean>
+
+    <spring:bean id="osBundleProductToFWProduct" class="org.mule.module.fulfillmentworks.transformers.OSBundleProductToFWProduct">
+        <spring:property name="productTransformerHelper" ref="productTransformerHelper"/>
+    </spring:bean>
+
+    <spring:bean id="osBundleProductToFWOffer" class="org.mule.module.fulfillmentworks.transformers.OSBundleProductToFWOffer">
+        <spring:property name="productTransformerHelper" ref="productTransformerHelper"/>
+    </spring:bean>
+
+    <spring:bean id="mongoDB" class="org.mockito.Mockito" factory-method="mock">
+        <spring:constructor-arg value="com.mongodb.DB"/>
+    </spring:bean>
+
+    <spring:bean id="ordersClient" class="org.mockito.Mockito" factory-method="mock">
+        <spring:constructor-arg value="org.mule.module.fulfillmentworks.client.OrdersClient"/>
+    </spring:bean>
+
+    <spring:bean id="productsClient" class="org.mockito.Mockito" factory-method="mock">
+        <spring:constructor-arg value="org.mule.module.fulfillmentworks.client.ProductsClient"/>
+    </spring:bean>
+
+    <spring:bean id="productFinder" class="org.mockito.Mockito" factory-method="mock">
+        <spring:constructor-arg value="org.mule.module.fulfillmentworks.ProductFinder"/>
+    </spring:bean>
+
+    <fulfillmentworks:config
+            ordersClient-ref="ordersClient"
+            productsClient-ref="productsClient"
+            osBundleProductToFWOffer-ref="osBundleProductToFWOffer"
+            osBundleProductToFWProduct-ref="osBundleProductToFWProduct"
+            osSimpleProductToFWProduct-ref="osSimpleProductToFWProduct"
+            productTransformerHelper-ref="productTransformerHelper"
+            productFinder-ref="productFinder"
+            mongoDb-ref="mongoDB"
+    />
+
+
+    <flow name="addOrder">
+        <fulfillmentworks:add-orders>
+            <fulfillmentworks:orders ref="#[payload]"/>
+        </fulfillmentworks:add-orders>
+    </flow>
+
+    <flow name="getOffers">
+        <fulfillmentworks:get-offers searchParams-ref="#[payload]"/>
+    </flow>
+
+    <flow name="getOrderStatus">
+        <fulfillmentworks:get-order-status id="#[payload]"/>
+    </flow>
+
+</mule>
