@@ -6,7 +6,7 @@
     <artifactId>mule-module-fulfillmentworks</artifactId>
     <packaging>mule-module</packaging>
     <name>Mule FulfillmentWorks Cloud Connector</name>
-    <version>2.1-SNAPSHOT</version>
+    <version>2.1</version>
     <description>Mule Cloud connector to FulfillmentWorks</description>
     <url>http://www.muleforge.org/projects/mule-module-fulfillmentworks</url>
 
@@ -17,6 +17,21 @@
         <mockito.version>1.8.2</mockito.version>
         <osis.commons.version>3.17.0</osis.commons.version>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>${dist-repo-id}</id>
+            <name>${dist-repo-name}</name>
+            <url>${dist-repo-url}</url>
+            <layout>default</layout>
+        </repository>
+        <snapshotRepository>
+            <id>${dist-snap-repo-id}</id>
+            <name>${dist-snap-repo-name}</name>
+            <url>${dist-snap-repo-url}</url>
+            <layout>default</layout>
+        </snapshotRepository>
+    </distributionManagement>
 
     <build>
         <pluginManagement>
@@ -381,14 +396,37 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <distributionManagement>
-      <repository>
-        <id>opensky.repo.releases</id>
-        <url>http://maven.prod.opensky.com:8081/content/repositories/releases</url>
-      </repository>
-      <snapshotRepository>
-        <id>opensky.repo.snapshots</id>
-        <url>http://maven.prod.opensky.com:8081/content/repositories/snapshots</url>
-      </snapshotRepository>
-    </distributionManagement>
+    <profiles>
+        <profile>
+            <id>dev-profile</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <dist-repo-id>opensky-dev.repo.releases</dist-repo-id>
+                <dist-repo-name>Development Maven Instance Release Repo</dist-repo-name>
+                <dist-repo-url>http://maven.dev.opensky.com:8081/content/repositories/releases</dist-repo-url>
+                <dist-snap-repo-id>opensky-dev.repo.snapshots</dist-snap-repo-id>
+                <dist-snap-repo-name>Development Maven Instance Snapshot Repo</dist-snap-repo-name>
+                <dist-snap-repo-url>http://maven.dev.opensky.com:8081/content/repositories/snapshots</dist-snap-repo-url>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod-profile</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>prod</value>
+                </property>
+            </activation>
+            <properties>
+                <dist-repo-id>opensky-prod.repo.releases</dist-repo-id>
+                <dist-repo-name>Production Maven Instance Release Repo</dist-repo-name>
+                <dist-repo-url>http://maven.prod.opensky.com:8081/content/repositories/releases</dist-repo-url>
+                <dist-snap-repo-id>opensky-prod.repo.snapshots</dist-snap-repo-id>
+                <dist-snap-repo-name>Production Maven Instance Snapshot Repo</dist-snap-repo-name>
+                <dist-snap-repo-url>http://maven.prod.opensky.com:8081/content/repositories/snapshots</dist-snap-repo-url>
+            </properties>
+        </profile>
+    </profiles>
 </project>
